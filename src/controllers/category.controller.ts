@@ -13,13 +13,13 @@ export class CategoryController {
   }
 
   @Post(SAVE_OR_UPDATE)
-  async saveOrUpdate(@Body('category') category: Category) {
+  async saveOrUpdate(@Body() category: Category) {
     return await this.categoryService.saveOrUpdate(category)
   }
 
   @Post(DELETE)
-  async delete(@Body('category') category: Category) {
-    return await this.categoryService.delete(category)
+  async delete(@Body('idCategory') idCategory: number) {
+    return await this.categoryService.delete(idCategory)
   }
 
   @Get(FIND_ALL)

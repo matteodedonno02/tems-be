@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn,ManyToMany } from "typeorm";
+import { Category } from "./category.entity";
 @Entity()
 export class Article {
   @PrimaryGeneratedColumn()
@@ -20,6 +20,7 @@ export class Article {
   @Column({type:'boolean', default : false})
   disabled: boolean
 
-
+  @ManyToMany(() => Category, (category) => category.articles)
+  categories: Category[]
 
 }

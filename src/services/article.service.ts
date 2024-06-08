@@ -18,23 +18,23 @@ export class ArticleService {
     return await this.articleRepo.save(article);
   }
 
-  async delete(article: Article): Promise<DeleteResult> {
-    return await this.articleRepo.delete(article);
+  async delete(idArticle: number): Promise<DeleteResult> {
+    return await this.articleRepo.delete(idArticle);
   }
 
   async findAll(): Promise<Article[]> {
-    return await this.articleRepo.find();
+    return await this.articleRepo.find({relations: {categories:true}});
   }
 
   async findEnabled(): Promise<Article[]> {
-    return await this.articleRepo.createQueryBuilder().where("disabled = false").getMany();
+    return await this.articleRepo.createQueryBuilder("article").where("article.disabled = false").leftJoinAndSelect("article.categories", "category").getMany();
   }
 
   async findByName(name: string): Promise<Article[]> {
-    return await this.articleRepo.createQueryBuilder().where("name =:name", { name }).getMany();
+    return await this.articleRepo.createQueryBuilder("article").where("article.name =:name", { name }).leftJoinAndSelect("article.categories", "category").getMany();
   }
 
-  async findById(id: number): Promise<Article> {
-    return await this.articleRepo.createQueryBuilder().where("id = :id", { id }).getOne();
+  async findById(idArticle: number): Promise<Article> {
+    return await this.articleRepo.createQueryBuilder("article").where("article.idArticle = :idArticle", { idArticle }).leftJoinAndSelect("article.categories", "category").getOne();
   }
 }

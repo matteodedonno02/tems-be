@@ -18,23 +18,23 @@ export class CategoryService {
     return await this.categoryRepo.save(category);
   }
 
-  async delete(category: Category): Promise<DeleteResult> {
-    return await this.categoryRepo.delete(category);
+  async delete(idCategory: number): Promise<DeleteResult> {
+    return await this.categoryRepo.delete(idCategory);
   }
 
   async findAll(): Promise<Category[]> {
-    return await this.categoryRepo.find();
+    return await this.categoryRepo.find({relations: {articles:true}});
   }
 
   async findEnabled(): Promise<Category[]> {
-    return await this.categoryRepo.createQueryBuilder().where("disabled = false").getMany();
+    return await this.categoryRepo.createQueryBuilder("category").where("category.disabled = false").leftJoinAndSelect("category.articles", "article").getMany();
   }
 
   async findByName(name: string): Promise<Category[]> {
-    return await this.categoryRepo.createQueryBuilder().where("name =:name", { name }).getMany();
+    return await this.categoryRepo.createQueryBuilder("category").where("category.name =:name", { name }).leftJoinAndSelect("category.articles", "article").getMany();
   }
 
-  async findById(id: number): Promise<Category> {
-    return await this.categoryRepo.createQueryBuilder().where("id = :id", { id }).getOne();
+  async findById(idCategory: number): Promise<Category> {
+    return await this.categoryRepo.createQueryBuilder("category").where("category.idCategory = :idCategory", { idCategory }).leftJoinAndSelect("category.articles", "article").getOne();
   }
 }

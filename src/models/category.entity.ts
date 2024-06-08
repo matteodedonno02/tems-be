@@ -15,7 +15,7 @@ export class Category {
   @Column({type:'boolean', default : false})
   disabled: boolean
 
-  @ManyToMany(() => Article)
+  @ManyToMany(() => Article, (article) => article.categories)
   @JoinTable()
   articles: Article[]
 

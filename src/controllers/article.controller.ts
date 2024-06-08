@@ -13,13 +13,13 @@ export class ArticleController {
   }
 
   @Post(SAVE_OR_UPDATE)
-  async saveOrUpdate(@Body('article') article: Article) {
+  async saveOrUpdate(@Body() article: Article) {
     return await this.articleService.saveOrUpdate(article)
   }
 
   @Post(DELETE)
-  async delete(@Body('article') article: Article) {
-    return await this.articleService.delete(article)
+  async delete(@Body('idArticle') idArticle: number) {
+    return await this.articleService.delete(idArticle)
   }
 
   @Get(FIND_ALL)
@@ -37,7 +37,7 @@ export class ArticleController {
   }
 
   @Get(FIND_BY_ID)
-  async findById(@Body('id') id: number): Promise<Article> {
-    return await this.articleService.findById(id)
+  async findById(@Body('idArticle') idArticle: number): Promise<Article> {
+    return await this.articleService.findById(idArticle)
   }
 }
