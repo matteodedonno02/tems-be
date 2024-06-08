@@ -1,23 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { User } from 'src/models/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { UsersService } from 'src/services/users.service';
+import { UserInfo } from 'src/util/user-info.decorator';
 
 @Controller('users')
 export class UsersController {
-    private userRepo: Repository<User>
     constructor(
-        private dataSource: DataSource
+        private usersService: UsersService
     ) {
-        this.userRepo = dataSource.getRepository(User)
     }
 
-    @Get('/')
-    test() {
-        const user: User = {
-            username: 'admin',
-            password: 'admin'
-        }
-        this.userRepo.save(user)
-        return { msg: 'it works' }
+    @Post('')
+    async login(@Body('username') username: string, @Body('password') password: string) {
+        return await this.usersService.login(username, password)
     }
 }

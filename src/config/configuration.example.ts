@@ -7,5 +7,6 @@ export default () => ({
         password: 'yourpwd',
         database: 'yourdb',
         synchronize: true
-    }
+    },
+    jwtSecret: 'yourjwtsecret'
 })
