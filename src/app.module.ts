@@ -9,6 +9,7 @@ import { TokenService } from './services/token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { IsLoggedMiddleware } from './middlewares/is-logged.middleware';
 import { TokenMiddleware } from './middlewares/token.middleware';
+import { CorsMiddleware } from './middlewares/cors.middleware';
 
 @Module({
   imports: [
@@ -43,6 +44,10 @@ import { TokenMiddleware } from './middlewares/token.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorsMiddleware)
+      .forRoutes({path: '*', method: RequestMethod.ALL})
+
     consumer
       .apply(TokenMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL })
