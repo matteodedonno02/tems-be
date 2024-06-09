@@ -1,7 +1,15 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { ArticleService } from "../services/article.service";
 import { Article } from "../models/article.entity";
-import {SAVE_OR_UPDATE, DELETE, FIND_ALL, FIND_ENABLED, FIND_BY_NAME, FIND_BY_ID} from "../util/routing-constants"
+import {
+  SAVE_OR_UPDATE,
+  DELETE,
+  FIND_ALL,
+  FIND_ENABLED,
+  FIND_BY_NAME,
+  FIND_BY_ID,
+  AUTH
+} from "../util/routing-constants";
 
 
 @Controller('article')
@@ -12,12 +20,12 @@ export class ArticleController {
   ) {
   }
 
-  @Post(SAVE_OR_UPDATE)
+  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
   async saveOrUpdate(@Body() article: Article) {
     return await this.articleService.saveOrUpdate(article)
   }
 
-  @Post(DELETE)
+  @Post(`${AUTH}/${DELETE}`)
   async delete(@Body('idArticle') idArticle: number) {
     return await this.articleService.delete(idArticle)
   }

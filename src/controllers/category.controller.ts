@@ -1,7 +1,15 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { CategoryService } from "../services/category.service";
 import { Category } from "../models/category.entity";
-import {SAVE_OR_UPDATE, DELETE, FIND_ALL, FIND_ENABLED, FIND_BY_NAME, FIND_BY_ID} from "../util/routing-constants"
+import {
+  SAVE_OR_UPDATE,
+  DELETE,
+  FIND_ALL,
+  FIND_ENABLED,
+  FIND_BY_NAME,
+  FIND_BY_ID,
+  AUTH
+} from "../util/routing-constants";
 
 
 @Controller('category')
@@ -12,12 +20,12 @@ export class CategoryController {
   ) {
   }
 
-  @Post(SAVE_OR_UPDATE)
+  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
   async saveOrUpdate(@Body() category: Category) {
     return await this.categoryService.saveOrUpdate(category)
   }
 
-  @Post(DELETE)
+  @Post(`${AUTH}/${DELETE}`)
   async delete(@Body('idCategory') idCategory: number) {
     return await this.categoryService.delete(idCategory)
   }

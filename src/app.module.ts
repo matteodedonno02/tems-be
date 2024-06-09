@@ -19,6 +19,7 @@ import { CorsMiddleware } from './middlewares/cors.middleware';
 import { SoldItemModule } from "./modules/sold-item.module";
 import { SoldItemService } from "./services/sold-item.service";
 import { SoldItemController } from "./controllers/sold-item.controller";
+import { AUTH, DELETE, SAVE_OR_UPDATE } from "./util/routing-constants";
 
 @Module({
   imports: [
@@ -72,6 +73,6 @@ export class AppModule implements NestModule {
 
     consumer
       .apply(IsLoggedMiddleware)
-      .forRoutes({ path: '*auth*', method: RequestMethod.ALL })
+      .forRoutes({ path: '*'+AUTH+'*', method: RequestMethod.ALL })
   }
 }

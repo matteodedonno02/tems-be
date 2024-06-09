@@ -6,7 +6,7 @@ import {
   DELETE,
   FIND_ALL,
   FIND_BY_ID,
-  FIND_BY_DATE
+  FIND_BY_DATE, AUTH
 } from "../util/routing-constants";
 
 
@@ -18,12 +18,12 @@ export class SoldItemController {
   ) {
   }
 
-  @Post(SAVE_OR_UPDATE)
+  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
   async saveOrUpdate(@Body() soldItem: SoldItem) {
     return await this.soldItemService.saveOrUpdate(soldItem)
   }
 
-  @Post(DELETE)
+  @Post(`${AUTH}/${DELETE}`)
   async delete(@Body('idSoldItem') idSoldItem: number) {
     return await this.soldItemService.delete(idSoldItem)
   }

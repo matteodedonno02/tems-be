@@ -5,3 +5,4 @@ export const FIND_ENABLED = 'findEnabled';
 export const FIND_BY_NAME = 'findByName';
 export const FIND_BY_DATE = 'findByDate';
 export const FIND_BY_ID = 'findById';
+export const AUTH = 'auth';
