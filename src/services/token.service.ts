@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/models/user.entity';
 
@@ -6,7 +7,8 @@ import { User } from 'src/models/user.entity';
 export class TokenService {
 
     constructor(
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private config: ConfigService
     ) { }
 
     async encode(user: User) {

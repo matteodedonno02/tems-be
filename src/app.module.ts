@@ -15,6 +15,7 @@ import { CategoryController } from './controllers/category.controller';
 import { ArticleController } from './controllers/article.controller';
 import { CategoryService } from './services/category.service';
 import { ArticleService } from './services/article.service';
+import { CorsMiddleware } from './middlewares/cors.middleware';
 
 @Module({
   imports: [
@@ -55,6 +56,10 @@ import { ArticleService } from './services/article.service';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorsMiddleware)
+      .forRoutes({path: '*', method: RequestMethod.ALL})
+
     consumer
       .apply(TokenMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL })
