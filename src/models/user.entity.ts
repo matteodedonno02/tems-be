@@ -10,4 +10,7 @@ export class User {
 
     @Column({ type: 'char', length: 128 })
     password: string
+
+    @Column()
+    role: string
 }

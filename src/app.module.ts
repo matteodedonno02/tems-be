@@ -20,6 +20,12 @@ import { SoldItemModule } from "./modules/sold-item.module";
 import { SoldItemService } from "./services/sold-item.service";
 import { SoldItemController } from "./controllers/sold-item.controller";
 import { AUTH, DELETE, SAVE_OR_UPDATE } from "./util/routing-constants";
+import { ShopModule } from './modules/shop.module';
+import { ShopController } from './controllers/shop.controller';
+import { ShopService } from './services/shop.service';
+import { FileModule } from './modules/file.module';
+import { FileService } from './services/file.service';
+import { FileController } from './controllers/file/file.controller';
 
 @Module({
   imports: [
@@ -45,20 +51,26 @@ import { AUTH, DELETE, SAVE_OR_UPDATE } from "./util/routing-constants";
     UsersModule,
     ArticleModule,
     CategoryModule,
-    SoldItemModule
+    SoldItemModule,
+    ShopModule,
+    FileModule
   ],
   controllers: [
     UsersController,
     CategoryController,
     ArticleController,
-    SoldItemController
+    SoldItemController,
+    ShopController,
+    FileController
   ],
   providers: [
     UsersService,
     TokenService,
     CategoryService,
     ArticleService,
-    SoldItemService
+    SoldItemService,
+    ShopService,
+    FileService
   ],
 })
 export class AppModule implements NestModule {

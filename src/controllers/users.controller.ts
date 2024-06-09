@@ -9,9 +9,7 @@ export class UsersController {
     }
 
     @Post('')
-    async login(@Body('username') username: string, @Body('password') password: string): Promise<{token: string}>  {
-        return {
-            token: await this.usersService.login(username, password)
-        }
+    async login(@Body('username') username: string, @Body('password') password: string): Promise<{token: string, shopExists: boolean}>  {
+        return await this.usersService.login(username, password)
     }
 }

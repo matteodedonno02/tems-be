@@ -3,6 +3,8 @@ import { UserNotFoundException } from 'src/errors/user-not-found.exception';
 import { User } from 'src/models/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { TokenService } from './token.service';
+import { Shop } from 'src/models/shop.entyty';
+import { ShopService } from './shop.service';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +13,8 @@ export class UsersService {
 
     constructor(
         private dataSource: DataSource,
-        private tokenService: TokenService
+        private tokenService: TokenService,
+        private shopService: ShopService
     ) {
         this.userRepo = dataSource.getRepository(User)
     }
@@ -26,6 +29,13 @@ export class UsersService {
             throw new UserNotFoundException()
         }
 
-        return await this.tokenService.encode({ ...finded })
+        const shop: Shop = await this.shopService.getShop()
+
+        return {
+            token: await this.tokenService.encode({ ...finded }),
+            role: finded.role,
+            shopExists: !!shop
+        }
     }
 }
+
