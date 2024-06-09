@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { DataSource, DeleteResult, Repository } from "typeorm";
-import { TokenService } from "./token.service";
 import { Category } from "../models/category.entity";
 
 @Injectable()

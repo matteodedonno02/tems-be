@@ -37,7 +37,7 @@ export class CategoryController {
   }
 
   @Get(FIND_BY_ID)
-  async findById(@Body('id') id: number): Promise<Category> {
+  async findById(@Body('idCategory') id: number): Promise<Category> {
     return await this.categoryService.findById(id)
   }
 }

@@ -16,6 +16,9 @@ import { ArticleController } from './controllers/article.controller';
 import { CategoryService } from './services/category.service';
 import { ArticleService } from './services/article.service';
 import { CorsMiddleware } from './middlewares/cors.middleware';
+import { SoldItemModule } from "./modules/sold-item.module";
+import { SoldItemService } from "./services/sold-item.service";
+import { SoldItemController } from "./controllers/sold-item.controller";
 
 @Module({
   imports: [
@@ -40,18 +43,21 @@ import { CorsMiddleware } from './middlewares/cors.middleware';
     }),
     UsersModule,
     ArticleModule,
-    CategoryModule
+    CategoryModule,
+    SoldItemModule
   ],
   controllers: [
     UsersController,
     CategoryController,
-    ArticleController
+    ArticleController,
+    SoldItemController
   ],
   providers: [
     UsersService,
     TokenService,
     CategoryService,
-    ArticleService
+    ArticleService,
+    SoldItemService
   ],
 })
 export class AppModule implements NestModule {

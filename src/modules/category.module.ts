@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Category } from "../models/category.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category]), ],
+  imports: [TypeOrmModule.forFeature([Category])],
   exports: [TypeOrmModule]
 })
 export class CategoryModule {}
