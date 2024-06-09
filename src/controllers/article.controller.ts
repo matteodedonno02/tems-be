@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { ArticleService } from "../services/article.service";
 import { Article } from "../models/article.entity";
-import {SAVE_OR_UPDATE, DELETE, FIND_ALL, FIND_ENABLED, FIND_BY_NAME, FIND_BY_ID} from "../util/rooting-constants"
+import {SAVE_OR_UPDATE, DELETE, FIND_ALL, FIND_ENABLED, FIND_BY_NAME, FIND_BY_ID} from "../util/routing-constants"
 
 
 @Controller('article')

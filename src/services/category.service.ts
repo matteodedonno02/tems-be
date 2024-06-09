@@ -8,8 +8,7 @@ export class CategoryService {
   private categoryRepo: Repository<Category>;
 
   constructor(
-    private dataSource: DataSource,
-    private tokenService: TokenService
+    private dataSource: DataSource
   ) {
     this.categoryRepo = dataSource.getRepository(Category);
   }

@@ -7,8 +7,7 @@ import { User } from 'src/models/user.entity';
 export class TokenService {
 
     constructor(
-        private jwtService: JwtService,
-        private config: ConfigService
+        private jwtService: JwtService
     ) { }
 
     async encode(user: User) {

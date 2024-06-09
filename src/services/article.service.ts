@@ -8,8 +8,7 @@ export class ArticleService {
   private articleRepo: Repository<Article>;
 
   constructor(
-    private dataSource: DataSource,
-    private tokenService: TokenService
+    private dataSource: DataSource
   ) {
     this.articleRepo = dataSource.getRepository(Article);
   }
