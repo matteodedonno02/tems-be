@@ -74,10 +74,15 @@ import { FileController } from './controllers/file/file.controller';
   ],
 })
 export class AppModule implements NestModule {
+
+  constructor(
+    private usersService: UsersService
+  ) { }
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CorsMiddleware)
-      .forRoutes({path: '*', method: RequestMethod.ALL})
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
 
     consumer
       .apply(TokenMiddleware)
@@ -85,6 +90,8 @@ export class AppModule implements NestModule {
 
     consumer
       .apply(IsLoggedMiddleware)
-      .forRoutes({ path: '*'+AUTH+'*', method: RequestMethod.ALL })
+      .forRoutes({ path: '*' + AUTH + '*', method: RequestMethod.ALL })
+
+    this.usersService.createDefaultSuperAdmin()
   }
 }

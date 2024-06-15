@@ -1,5 +1,6 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Shop } from 'src/models/shop.entyty';
 import { ShopService } from 'src/services/shop.service';
 import { AUTH } from 'src/util/routing-constants';
 
@@ -9,6 +10,11 @@ export class ShopController {
     constructor(
         private shopService: ShopService
     ) { }
+
+    @Get()
+    async getShop(): Promise<Shop> {
+        return await this.shopService.getShop()
+    }
 
     @Post(`${AUTH}/configure`)
     @UseInterceptors(FileInterceptor('file'))

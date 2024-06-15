@@ -5,6 +5,8 @@ import { DataSource, Repository } from 'typeorm';
 import { TokenService } from './token.service';
 import { Shop } from 'src/models/shop.entyty';
 import { ShopService } from './shop.service';
+import { sha512 } from 'src/util/sha512';
+import { MalformedPassword } from 'src/errors/malformed-password.exception';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +19,19 @@ export class UsersService {
         private shopService: ShopService
     ) {
         this.userRepo = dataSource.getRepository(User)
+    }
+
+    async createDefaultSuperAdmin() {
+        const superAdmin = await this.userRepo.findOneBy({
+            username: 'admin'
+        })
+        if (!superAdmin) {
+            await this.userRepo.save({
+                username: 'admin',
+                password: sha512('admin'),
+                role: 'superadmin'
+            })
+        }
     }
 
     async login(username: string, password: string) {
@@ -36,6 +51,23 @@ export class UsersService {
             role: finded.role,
             shopExists: !!shop
         }
+    }
+
+    async changePassword(idUser: number, newPassword: string) {
+        if (!this.checkPassword(newPassword)) {
+            throw new MalformedPassword()
+        }
+
+        return await this.userRepo.createQueryBuilder()
+            .update()
+            .set({ password: sha512(newPassword) })
+            .where({ idUser })
+            .execute()
+    }
+
+    private checkPassword(password: string) {
+        const regex = /^(?=.*[A-Z])(?=.*\d).+$/
+        return password.length >= 8 && regex.test(password)
     }
 }
 

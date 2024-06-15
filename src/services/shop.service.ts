@@ -6,10 +6,10 @@ import { FileService } from './file.service';
 
 @Injectable()
 export class ShopService {
-    
+
     private shopRepo: Repository<Shop>
     private fileRepo: Repository<File>
-    
+
     constructor(
         private dataSource: DataSource,
         private fileService: FileService
@@ -19,7 +19,12 @@ export class ShopService {
     }
 
     async getShop(): Promise<Shop> {
-        return await this.shopRepo.createQueryBuilder().getOne()
+        const shops = await this.shopRepo.find({
+            relations: {
+                logoFile: true
+            }
+        })
+        return shops[0]
     }
 
     async saveShop(file: Express.Multer.File, shopName: string) {
