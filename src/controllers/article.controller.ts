@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ArticleService } from "../services/article.service";
 import { Article } from "../models/article.entity";
 import {
@@ -34,6 +34,7 @@ export class ArticleController {
   async findAll() {
     return await this.articleService.findAll()
   }
+
   @Get(FIND_ENABLED)
   async findEnabled() {
     return await this.articleService.findEnabled()
@@ -45,7 +46,7 @@ export class ArticleController {
   }
 
   @Get(FIND_BY_ID)
-  async findById(@Body('idArticle') idArticle: number): Promise<Article> {
+  async findById(@Param('id') idArticle: number): Promise<Article> {
     return await this.articleService.findById(idArticle)
   }
 }
