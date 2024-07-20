@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { CategoryService } from "../services/category.service";
 import { Category } from "../models/category.entity";
 import {
@@ -8,7 +8,8 @@ import {
   FIND_ENABLED,
   FIND_BY_NAME,
   FIND_BY_ID,
-  AUTH
+  AUTH,
+  GET_PAGED
 } from "../util/routing-constants";
 
 
@@ -47,5 +48,10 @@ export class CategoryController {
   @Get(FIND_BY_ID)
   async findById(@Body('idCategory') id: number): Promise<Category> {
     return await this.categoryService.findById(id)
+  }
+
+  @Get(`${AUTH}/${GET_PAGED}`)
+  async getPaged(@Param('from') from: number, @Param('to') to: number) {
+    return await this.categoryService.getPaged(from, to)
   }
 }
