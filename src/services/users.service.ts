@@ -3,7 +3,7 @@ import { UserNotFoundException } from 'src/errors/user-not-found.exception';
 import { User } from 'src/models/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { TokenService } from './token.service';
-import { Shop } from 'src/models/shop.entyty';
+import { Shop } from 'src/models/shop.entity';
 import { ShopService } from './shop.service';
 import { sha512 } from 'src/util/sha512';
 import { MalformedPassword } from 'src/errors/malformed-password.exception';

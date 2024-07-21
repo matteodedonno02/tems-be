@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { File } from 'src/models/file.entity';
-import { Shop } from 'src/models/shop.entyty';
+import { Shop } from 'src/models/shop.entity';
 import { DataSource, Repository } from 'typeorm';
 import { FileService } from './file.service';
 

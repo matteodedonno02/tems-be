@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Shop } from 'src/models/shop.entyty';
+import { Shop } from 'src/models/shop.entity';
 import { ShopService } from 'src/services/shop.service';
 import { AUTH } from 'src/util/routing-constants';
 

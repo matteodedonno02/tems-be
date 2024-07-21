@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Shop } from "./shop.entyty";
+import { Shop } from "./shop.entity";
 
 @Entity()
 export class File {
