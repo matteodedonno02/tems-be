@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { DataSource, DeleteResult, Repository } from "typeorm";
-import { Category } from "../models/category.entity";
+import { Injectable } from '@nestjs/common';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { Category } from '../models/category.entity';
 import { File } from '../models/file.entity';
 import { FileService } from './file.service';
 
@@ -18,9 +18,7 @@ export class CategoryService {
   async saveOrUpdate(file: Express.Multer.File,category: Category): Promise<Category> {
     if(!category.image)
       this.fileService.deleteFile(category.image);
-    const savedFile: File = await this.fileService.saveFile(file);
-
-    category.image = savedFile;
+    category.image = await this.fileService.saveFile(file);
     return await this.categoryRepo.save(category);
   }
 
