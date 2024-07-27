@@ -24,8 +24,9 @@ export class CategoryController {
 
   @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
   @UseInterceptors(FileInterceptor('file'))
-  async saveOrUpdate(@UploadedFile() file: Express.Multer.File, @Body() category: Category) {
-    return await this.categoryService.saveOrUpdate(file, category);
+  async saveOrUpdate(@UploadedFile() file: Express.Multer.File, @Body() body) {
+    const json = JSON.parse(body.json)
+    return await this.categoryService.saveOrUpdate(file, json.category);
   }
 
   @Delete(`${AUTH}/${DELETE}`)

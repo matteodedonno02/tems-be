@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { Category } from '../models/category.entity';
-import { File } from '../models/file.entity';
 import { FileService } from './file.service';
 
 @Injectable()
@@ -10,7 +9,7 @@ export class CategoryService {
 
   constructor(
     private dataSource: DataSource,
-    private fileService: FileService
+    private fileService: FileService,
   ) {
     this.categoryRepo = dataSource.getRepository(Category);
   }
@@ -18,7 +17,9 @@ export class CategoryService {
   async saveOrUpdate(file: Express.Multer.File, category: Category): Promise<Category> {
     if (!category.image)
       this.fileService.deleteFile(category.image);
-    category.image = await this.fileService.saveFile(file);
+    if (file != null) {
+      category.image = await this.fileService.saveFile(file);
+    }
     return await this.categoryRepo.save(category);
   }
 
@@ -26,16 +27,16 @@ export class CategoryService {
   async delete(idCategory: number): Promise<DeleteResult> {
     const existingCategory = await this.categoryRepo.findOne({
       where: {
-        idCategory
+        idCategory,
       },
       relations: {
-        image: true
-      }
-    })
+        image: true,
+      },
+    });
 
     if (existingCategory) {
-      await this.fileService.deleteFile(existingCategory.image)
-      return await this.categoryRepo.delete(idCategory)
+      await this.fileService.deleteFile(existingCategory.image);
+      return await this.categoryRepo.delete(idCategory);
     }
   }
 
@@ -45,36 +46,36 @@ export class CategoryService {
 
   async findEnabled(): Promise<Category[]> {
     return await this.categoryRepo
-      .createQueryBuilder("category")
-      .where("category.disabled = false")
-      .leftJoinAndSelect("category.articles", "article")
+      .createQueryBuilder('category')
+      .where('category.disabled = false')
+      .leftJoinAndSelect('category.articles', 'article')
       .getMany();
   }
 
   async findByName(name: string): Promise<Category[]> {
     return await this.categoryRepo
-      .createQueryBuilder("category")
-      .where("category.name =:name", { name })
-      .leftJoinAndSelect("category.articles", "article")
+      .createQueryBuilder('category')
+      .where('category.name =:name', { name })
+      .leftJoinAndSelect('category.articles', 'article')
       .getMany();
   }
 
   async findById(idCategory: number): Promise<Category> {
     return await this.categoryRepo
-      .createQueryBuilder("category")
-      .where("category.idCategory = :idCategory", { idCategory })
-      .leftJoinAndSelect("category.articles", "article")
+      .createQueryBuilder('category')
+      .where('category.idCategory = :idCategory', { idCategory })
+      .leftJoinAndSelect('category.articles', 'article')
       .getOne();
   }
 
   async getPaged(skip: number, limit: number, searchterm?: string) {
-    let query = await this.categoryRepo.createQueryBuilder('category')
+    let query = await this.categoryRepo.createQueryBuilder('category');
 
     if (searchterm) {
-      const lowercasedSearchTerm = `%${searchterm.toLowerCase()}%`
-      query = query.where('LOWER(category.name) LIKE :searchTerm', { searchTerm: lowercasedSearchTerm })
+      const lowercasedSearchTerm = `%${searchterm.toLowerCase()}%`;
+      query = query.where('LOWER(category.name) LIKE :searchTerm', { searchTerm: lowercasedSearchTerm });
     }
 
-    return await query.skip(skip).take(limit).getMany()
+    return await query.skip(skip).take(limit).getMany();
   }
 }
