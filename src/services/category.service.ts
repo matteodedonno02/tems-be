@@ -15,8 +15,8 @@ export class CategoryService {
     this.categoryRepo = dataSource.getRepository(Category);
   }
 
-  async saveOrUpdate(file: Express.Multer.File,category: Category): Promise<Category> {
-    if(!category.image)
+  async saveOrUpdate(file: Express.Multer.File, category: Category): Promise<Category> {
+    if (!category.image)
       this.fileService.deleteFile(category.image);
     category.image = await this.fileService.saveFile(file);
     return await this.categoryRepo.save(category);
@@ -24,7 +24,19 @@ export class CategoryService {
 
 
   async delete(idCategory: number): Promise<DeleteResult> {
-    return await this.categoryRepo.delete(idCategory);
+    const existingCategory = await this.categoryRepo.findOne({
+      where: {
+        idCategory
+      },
+      relations: {
+        image: true
+      }
+    })
+
+    if (existingCategory) {
+      await this.fileService.deleteFile(existingCategory.image)
+      return await this.categoryRepo.delete(idCategory)
+    }
   }
 
   async findAll(): Promise<Category[]> {
@@ -32,24 +44,37 @@ export class CategoryService {
   }
 
   async findEnabled(): Promise<Category[]> {
-    return await this.categoryRepo.createQueryBuilder("category").where("category.disabled = false").leftJoinAndSelect("category.articles", "article").getMany();
+    return await this.categoryRepo
+      .createQueryBuilder("category")
+      .where("category.disabled = false")
+      .leftJoinAndSelect("category.articles", "article")
+      .getMany();
   }
 
   async findByName(name: string): Promise<Category[]> {
-    return await this.categoryRepo.createQueryBuilder("category").where("category.name =:name", { name }).leftJoinAndSelect("category.articles", "article").getMany();
+    return await this.categoryRepo
+      .createQueryBuilder("category")
+      .where("category.name =:name", { name })
+      .leftJoinAndSelect("category.articles", "article")
+      .getMany();
   }
 
   async findById(idCategory: number): Promise<Category> {
-    return await this.categoryRepo.createQueryBuilder("category").where("category.idCategory = :idCategory", { idCategory }).leftJoinAndSelect("category.articles", "article").getOne();
+    return await this.categoryRepo
+      .createQueryBuilder("category")
+      .where("category.idCategory = :idCategory", { idCategory })
+      .leftJoinAndSelect("category.articles", "article")
+      .getOne();
   }
 
-  async getPaged(from: number, to: number) {
-    return await this.categoryRepo.find({
-      skip: from,
-      take: to,
-      relations: {
-        image: true
-      }
-    })
+  async getPaged(skip: number, limit: number, searchterm?: string) {
+    let query = await this.categoryRepo.createQueryBuilder('category')
+
+    if (searchterm) {
+      const lowercasedSearchTerm = `%${searchterm.toLowerCase()}%`
+      query = query.where('LOWER(category.name) LIKE :searchTerm', { searchTerm: lowercasedSearchTerm })
+    }
+
+    return await query.skip(skip).take(limit).getMany()
   }
 }

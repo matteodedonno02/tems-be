@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CategoryService } from '../services/category.service';
-import { Category } from '../models/category.entity';
+import { Body, Controller, Delete, Get, Param, Post, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { CategoryService } from "../services/category.service";
+import { Category } from "../models/category.entity";
+
 import {
   AUTH,
   DELETE,
@@ -19,16 +20,15 @@ export class CategoryController {
 
   constructor(
     private categoryService: CategoryService,
-  ) {
-  }
+  ) { }
 
   @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
   @UseInterceptors(FileInterceptor('file'))
-  async saveOrUpdate(@UploadedFile() file: Express.Multer.File, @Body() category : Category) {
+  async saveOrUpdate(@UploadedFile() file: Express.Multer.File, @Body() category: Category) {
     return await this.categoryService.saveOrUpdate(file, category);
   }
 
-  @Post(`${AUTH}/${DELETE}`)
+  @Delete(`${AUTH}/${DELETE}`)
   async delete(@Body('idCategory') idCategory: number) {
     return await this.categoryService.delete(idCategory);
   }
@@ -54,7 +54,7 @@ export class CategoryController {
   }
 
   @Get(`${AUTH}/${GET_PAGED}`)
-  async getPaged(@Param('from') from: number, @Param('to') to: number) {
-    return await this.categoryService.getPaged(from, to);
+  async getPaged(@Param('skip') skip: number, @Param('limit') limit: number, @Query('searchTerms') searchTerms?: string) {
+    return await this.categoryService.getPaged(skip, limit, searchTerms)
   }
 }

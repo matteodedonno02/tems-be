@@ -14,8 +14,8 @@ export class FileService {
     private fileRepo: Repository<File>;
 
     constructor(
-      private config: ConfigService,
-      private dataSource: DataSource,
+        private config: ConfigService,
+        private dataSource: DataSource,
     ) {
         this.uploadPath = this.config.get('uploadPath');
         this.fileRepo = dataSource.getRepository(File);
@@ -44,12 +44,16 @@ export class FileService {
         });
     }
 
-
     async deleteFile(file: File): Promise<void> {
+        if (!file) {
+            return
+        }
+
         return await this.dataSource.transaction(async (entityManager) => {
             const foundFile = await entityManager.findBy(File, {
                 uuid: file.uuid,
             });
+
             if (foundFile) {
                 let fullPath;
                 try {
@@ -58,6 +62,8 @@ export class FileService {
                 } catch (_ex) {
                     throw new DeleteFailed();
                 }
+
+                await entityManager.remove(file)
             } else
                 throw new FileNotFound();
         });

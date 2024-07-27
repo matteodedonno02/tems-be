@@ -11,10 +11,10 @@ export class CorsMiddleware implements NestMiddleware {
     private config: ConfigService
   ) {
     let whitelist = config.get('corsWhitelist')
-    whitelist = Array.isArray(whitelist) ? whitelist : ['*'] 
+    whitelist = Array.isArray(whitelist) ? whitelist : ['*']
     this.options = {
       origin: whitelist,
-      methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
       preflightContinue: false
     }
   }

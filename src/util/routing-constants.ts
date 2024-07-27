@@ -6,4 +6,4 @@ export const FIND_BY_NAME = 'findByName';
 export const FIND_BY_DATE = 'findByDate';
 export const FIND_BY_ID = ':id';
 export const AUTH = 'auth';
-export const GET_PAGED = 'paged/:from/:to'
+export const GET_PAGED = 'paged/:skip/:limit'
