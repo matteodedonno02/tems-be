@@ -10,7 +10,9 @@ export class Category {
   @Column({ type: 'varchar' })
   name: string
 
-  @OneToOne(() => File, (file) => file.idFile)
+  @OneToOne(() => File, (file) => file.idFile, {
+    onDelete: 'SET NULL'
+  })
   @JoinColumn()
   image: File
 

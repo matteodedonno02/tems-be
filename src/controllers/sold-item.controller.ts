@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from "@nestjs/common";
 import { SoldItemService } from "../services/sold-item.service";
 import { SoldItem } from "../models/sold-item.entity";
 import {
-  SAVE_OR_UPDATE,
+  SAVE,
   DELETE,
   FIND_ALL,
   FIND_BY_ID,
@@ -18,7 +18,7 @@ export class SoldItemController {
   ) {
   }
 
-  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
+  @Post(`${AUTH}/${SAVE}`)
   async saveOrUpdate(@Body() soldItem: SoldItem) {
     return await this.soldItemService.saveOrUpdate(soldItem)
   }

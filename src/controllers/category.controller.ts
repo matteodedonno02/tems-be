@@ -10,7 +10,8 @@ import {
   FIND_BY_NAME,
   FIND_ENABLED,
   GET_PAGED,
-  SAVE_OR_UPDATE,
+  SAVE,
+  UPDATE,
 } from '../util/routing-constants';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -22,11 +23,18 @@ export class CategoryController {
     private categoryService: CategoryService,
   ) { }
 
-  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
+  @Post(`${AUTH}/${SAVE}`)
   @UseInterceptors(FileInterceptor('file'))
-  async saveOrUpdate(@UploadedFile() file: Express.Multer.File, @Body() body) {
+  async save(@UploadedFile() file: Express.Multer.File, @Body() body) {
     const json = JSON.parse(body.json)
-    return await this.categoryService.saveOrUpdate(file, json.category);
+    return await this.categoryService.save(file, json.category);
+  }
+
+  @Post(`${AUTH}/${UPDATE}`)
+  @UseInterceptors(FileInterceptor('file'))
+  async update(@UploadedFile() file: Express.Multer.File, @Body() body) {
+    const json = JSON.parse(body.json)
+    return await this.categoryService.update(file, json.category);
   }
 
   @Delete(`${AUTH}/${DELETE}`)
@@ -57,5 +65,10 @@ export class CategoryController {
   @Get(`${AUTH}/${GET_PAGED}`)
   async getPaged(@Param('skip') skip: number, @Param('limit') limit: number, @Query('searchTerms') searchTerms?: string) {
     return await this.categoryService.getPaged(skip, limit, searchTerms)
+  }
+
+  @Get(`${AUTH}/file`)
+  async getFile(@Query('idCategory') idCategory: number) {
+    return await this.categoryService.getFile(idCategory)
   }
 }

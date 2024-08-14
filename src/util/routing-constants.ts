@@ -1,4 +1,5 @@
-export const SAVE_OR_UPDATE = 'saveOrUpdate';
+export const SAVE = 'save';
+export const UPDATE = 'update'
 export const DELETE = 'delete';
 export const FIND_ALL = 'findAll';
 export const FIND_ENABLED = 'findEnabled';

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ArticleService } from "../services/article.service";
 import { Article } from "../models/article.entity";
 import {
-  SAVE_OR_UPDATE,
+  SAVE,
   DELETE,
   FIND_ALL,
   FIND_ENABLED,
@@ -20,7 +20,7 @@ export class ArticleController {
   ) {
   }
 
-  @Post(`${AUTH}/${SAVE_OR_UPDATE}`)
+  @Post(`${AUTH}/${SAVE}`)
   async saveOrUpdate(@Body() article: Article) {
     return await this.articleService.saveOrUpdate(article)
   }

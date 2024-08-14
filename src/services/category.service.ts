@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Category } from '../models/category.entity';
 import { FileService } from './file.service';
+import { File } from 'src/models/file.entity';
 
 @Injectable()
 export class CategoryService {
@@ -14,13 +15,19 @@ export class CategoryService {
     this.categoryRepo = dataSource.getRepository(Category);
   }
 
-  async saveOrUpdate(file: Express.Multer.File, category: Category): Promise<Category> {
-    if (!category.image)
-      this.fileService.deleteFile(category.image);
+  async save(file: Express.Multer.File, category: Category) {
     if (file != null) {
       category.image = await this.fileService.saveFile(file);
     }
     return await this.categoryRepo.save(category);
+  }
+
+  async update(file: Express.Multer.File, category: Category): Promise<UpdateResult> {
+    if (file) {
+      category.image = await this.fileService.saveFile(file)
+    }
+    delete category.articles
+    return await this.categoryRepo.update({ idCategory: category.idCategory }, category)
   }
 
 
@@ -32,11 +39,15 @@ export class CategoryService {
       relations: {
         image: true,
       },
-    });
+    })
 
     if (existingCategory) {
-      await this.fileService.deleteFile(existingCategory.image);
-      return await this.categoryRepo.delete(idCategory);
+      return await this.dataSource.transaction(async (entityManager) => {
+        await this.fileService.deleteFile(existingCategory.image)
+        return await entityManager.delete(Category, {
+          idCategory: existingCategory.idCategory
+        })
+      })
     }
   }
 
@@ -77,5 +88,16 @@ export class CategoryService {
     }
 
     return await query.skip(skip).take(limit).getMany();
+  }
+
+  async getFile(idCategory: number) {
+    const category = await this.categoryRepo.findOne({
+      where: { idCategory },
+      relations: {
+        image: true
+      }
+    })
+
+    return category?.image
   }
 }
