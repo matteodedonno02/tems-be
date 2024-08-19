@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { ArticleService } from "../services/article.service";
 import { Article } from "../models/article.entity";
 import {
@@ -8,7 +8,8 @@ import {
   FIND_ENABLED,
   FIND_BY_NAME,
   FIND_BY_ID,
-  AUTH
+  AUTH,
+  GET_PAGED
 } from "../util/routing-constants";
 
 
@@ -48,5 +49,10 @@ export class ArticleController {
   @Get(FIND_BY_ID)
   async findById(@Param('id') idArticle: number): Promise<Article> {
     return await this.articleService.findById(idArticle)
+  }
+
+  @Get(`${AUTH}/${GET_PAGED}`)
+  async getPaged(@Param('skip') skip: number, @Param('limit') limit: number, @Query('searchTerms') searchTerms?: string) {
+    return await this.articleService.getPaged(skip, limit, searchTerms)
   }
 }

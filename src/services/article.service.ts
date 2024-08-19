@@ -21,7 +21,7 @@ export class ArticleService {
   }
 
   async findAll(): Promise<Article[]> {
-    return await this.articleRepo.find({relations: {categories:true}});
+    return await this.articleRepo.find({ relations: { categories: true } });
   }
 
   async findEnabled(): Promise<Article[]> {
@@ -34,5 +34,16 @@ export class ArticleService {
 
   async findById(idArticle: number): Promise<Article> {
     return await this.articleRepo.createQueryBuilder("article").where("article.idArticle = :idArticle", { idArticle }).leftJoinAndSelect("article.categories", "category").getOne();
+  }
+
+  async getPaged(skip: number, limit: number, searchterm?: string) {
+    let query = await this.articleRepo.createQueryBuilder('article');
+
+    if (searchterm) {
+      const lowercasedSearchTerm = `%${searchterm.toLowerCase()}%`;
+      query = query.where('LOWER(category.name) LIKE :searchTerm', { searchTerm: lowercasedSearchTerm });
+    }
+
+    return await query.skip(skip).take(limit).getMany();
   }
 }

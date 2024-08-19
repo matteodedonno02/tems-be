@@ -37,7 +37,6 @@ const getConfiguration = () => {
 
     default:
       return configurationDev
-      break;
   }
 };
 
